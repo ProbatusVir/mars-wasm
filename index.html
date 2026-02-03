@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Josh "mars-wasm"</title>
+</head>
+<body>
+<h1>Hello World!</h1>
+<label for="input"></label><input type="text" id="input" placeholder="Enter something">
+<button id="process">Process</button>
+<div id="output"></div>
+
+<script type="module">
+	// Import your wasm module
+	import init, { make_string } from './pkg/mars_wasm.js';
+
+	async function run() {
+		// Initialize the wasm module
+		await init();
+
+		document.getElementById('process').addEventListener('click', () => {
+			const input = document.getElementById('input').value;
+			document.getElementById('output').textContent = make_string(input);
+		});
+	}
+
+	run();
+</script>
+</body>
+</html>
