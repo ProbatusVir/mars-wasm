@@ -1,0 +1,5 @@
+name = "mars-wasm"
+compatibility_date = "2026-02-03"
+
+[build]
+command = "curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh && wasm-pack build --target web"
