@@ -5,26 +5,18 @@
 	<title>Josh "mars-wasm"</title>
 </head>
 <body>
-<h1>Hello World!</h1>
-<label for="input"></label><input type="text" id="input" placeholder="Enter something">
-<button id="process">Process</button>
-<div id="output"></div>
+
+<!-- shamelessly copy-pasted from `https://github.com/emilk/eframe_template/blob/main/index.html` -->
+
+<!-- The WASM code will resize the canvas dynamically -->
+<!-- the id is hardcoded in main.rs . so, make sure both match. -->
+<canvas id="application_canvas"></canvas>
 
 <script type="module">
-	// Import your wasm module
-	import init, { make_string } from './pkg/mars_wasm.js';
-
-	async function run() {
-		// Initialize the wasm module
-		await init();
-
-		document.getElementById('process').addEventListener('click', () => {
-			const input = document.getElementById('input').value;
-			document.getElementById('output').textContent = make_string(input);
-		});
-	}
-
-	run();
+	import init, { start } from './pkg/mars_wasm.js'
+	init().then(() => {
+		start("application_canvas");
+	});
 </script>
 </body>
 </html>
