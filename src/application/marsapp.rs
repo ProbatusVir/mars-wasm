@@ -25,6 +25,7 @@ impl MarsApp
 					ui.button("Edit");
 					ui.button("Run");
 					ui.button("Settings");
+					Self::create_tools_section(ui)
 				})
 			});
 	} // create_toolbar
