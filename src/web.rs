@@ -1,6 +1,6 @@
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsValue;
-use crate::app::MarsApp;
+use crate::application::MarsApp;
 use web_sys::HtmlCanvasElement;
 
 #[wasm_bindgen]
