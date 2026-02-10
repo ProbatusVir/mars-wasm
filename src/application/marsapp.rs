@@ -1,5 +1,5 @@
 use eframe::{App, Frame};
-use egui::{Context, Ui, Widget};
+use egui::{Context, Ui};
 use core::default::Default;
 use eframe::epaint::Color32;
 use crate::application::helper::StickyPopupExt;
@@ -22,6 +22,7 @@ pub(crate) struct MarsApp
 
 impl MarsApp
 {
+	#[allow(dead_code)]
 	pub fn new() -> Self
 	{
 		Self {
@@ -46,96 +47,96 @@ impl MarsApp
 	fn create_file_section(ui : &mut Ui) {
 		let file_button = ui.button("File");
 		file_button.create_popup(ui, |ui : &mut Ui| {
-									ui.label("New");
-									ui.label("Open...");
-									ui.label("Close");
-									ui.label("Close All");
-									// TODO: investigate putting a line here.
-									ui.label("Save");
-									ui.label("Save As...");
-									ui.label("Save All");
-									ui.label("Dump Memory...");
-									// TODO: Another line here
-									ui.label("Print...");
-									// TODO: Investigate if this applies to web...
-									ui.label("Exit");
-								},
-								Id::File,
+			ui.label("New");
+			ui.label("Open...");
+			ui.label("Close");
+			ui.label("Close All");
+			// TODO: investigate putting a line here.
+			ui.label("Save");
+			ui.label("Save As...");
+			ui.label("Save All");
+			ui.label("Dump Memory...");
+			// TODO: Another line here
+			ui.label("Print...");
+			// TODO: Investigate if this applies to web...
+			ui.label("Exit");
+		},
+		Id::File,
 		)
 	} // create_file_section
 
 	fn create_edit_section(ui : &mut Ui) {
 		ui.button("Edit").create_popup(ui, |ui : &mut Ui| {
-									ui.label("Undo");
-									ui.label("Redo");
-									// TODO: Put a line here
-									ui.label("Cut");
-									ui.label("Copy");
-									ui.label("Paste");
-									// TODO: Put a line here
-									ui.label("Find/Replace");
-									ui.label("Select All");
-								},
-								Id::Edit,
+			ui.label("Undo");
+			ui.label("Redo");
+			// TODO: Put a line here
+			ui.label("Cut");
+			ui.label("Copy");
+			ui.label("Paste");
+			// TODO: Put a line here
+			ui.label("Find/Replace");
+			ui.label("Select All");
+		},
+		Id::Edit,
 		);
 	} // create_edit_section
 
 	fn create_run_section(ui : &mut Ui) {
 		ui.button("Run").create_popup(ui, |ui : &mut Ui| {
-									ui.label("Assemble");
-									ui.label("Go");
-									ui.label("Step");
-									ui.label("Backstep");
-									ui.label("Pause");
-									ui.label("Stop");
-									ui.label("Reset");
-									// TODO: Put a line break here
-									ui.label("Clear all breakpoints");
-									ui.label("Toggle all breakpoints");
-								},
-								Id::Run,
+		ui.label("Assemble");
+		ui.label("Go");
+		ui.label("Step");
+		ui.label("Backstep");
+		ui.label("Pause");
+		ui.label("Stop");
+		ui.label("Reset");
+		// TODO: Put a line break here
+		ui.label("Clear all breakpoints");
+		ui.label("Toggle all breakpoints");
+		},
+		Id::Run,
 		)
 	} // create_run_section
 
 	fn create_settings_section(ui : &mut Ui) {
 		ui.button("Settings").create_popup(ui, |ui : &mut Ui| {
-									let mut boolean : bool = false;
-
-									ui.checkbox(&mut boolean, "Show Labels Window (symbol table)");
-									ui.checkbox(&mut boolean, "Program arguments provided to wasm program");
-									ui.checkbox(&mut boolean, "Popup dialogue for input syscalls"); // CLARIFY: Does wasm have syscalls?
-									ui.checkbox(&mut boolean, "Addresses displayed in hexadecimal");
-									ui.checkbox(&mut boolean, "Values displayed in hexadecimal");
-									// TODO: Line
-									ui.checkbox(&mut boolean, "Assemble file upon opening");
-									ui.checkbox(&mut boolean, "Assemble all files in directory");
-									ui.checkbox(&mut boolean, "Assembler warnings are considered errors");
-									ui.checkbox(&mut boolean, "Initialize Program Counter to global 'main' if initialized");
-									// Clarify: I don't think any of the last three options make sense here.
-									ui.label("Editor...");
-									ui.label("Highlighting...");
-									ui.label("Exception Handler...");
-									ui.label("Memory Configuration...");
-								},
-								Id::Settings,
+			let mut boolean : bool = false;
+	
+			ui.checkbox(&mut boolean, "Show Labels Window (symbol table)");
+			ui.checkbox(&mut boolean, "Program arguments provided to wasm program");
+			ui.checkbox(&mut boolean, "Popup dialogue for input syscalls"); // CLARIFY: Does wasm have syscalls?
+			ui.checkbox(&mut boolean, "Addresses displayed in hexadecimal");
+			ui.checkbox(&mut boolean, "Values displayed in hexadecimal");
+			// TODO: Line
+			ui.checkbox(&mut boolean, "Assemble file upon opening");
+			ui.checkbox(&mut boolean, "Assemble all files in directory");
+			ui.checkbox(&mut boolean, "Assembler warnings are considered errors");
+			ui.checkbox(&mut boolean, "Initialize Program Counter to global 'main' if initialized");
+			// Clarify: I don't think any of the last three options make sense here.
+			ui.label("Editor...");
+			ui.label("Highlighting...");
+			ui.label("Exception Handler...");
+			ui.label("Memory Configuration...");
+		},
+		Id::Settings,
 		)
 	} // create_settings_section
 
 	fn create_tools_section(ui : &mut Ui) {
 		let this_button = ui.button("Tools");
 		this_button.create_popup(ui, |ui : &mut Ui| {
-									ui.label("Nothing here yet!")
-								},
-								Id::Tools,
+			ui.label("Nothing here yet!")
+		},
+		Id::Tools,
 		)
 	} // create_tools_section
 
 	fn create_help_section(ui : &mut Ui) {
 		ui.button("Help").create_popup(ui, |ui : &mut Ui| {
-									ui.label("Help...");
-									ui.label("About...");
-								},
-								Id::Help
+			ui.label("Help...");
+			ui.label("About...");
+		},
+		Id::Help
 		)
 	} // create_help_section
 	
