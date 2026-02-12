@@ -1,4 +1,4 @@
-use egui::{Ui, Popup, InputState};
+use egui::{Ui, Popup, InputState, PopupCloseBehavior};
 use log::{info};
 use super::marsapp::Id;
 
@@ -19,6 +19,7 @@ impl StickyPopupExt for egui::Response {
 		// Open (or keep open) the popup.
 		let popup_response = if is_pointing_at_button || is_popup_open {
 				popup.open_memory(egui::SetOpenCommand::Bool(true))
+				.close_behavior(PopupCloseBehavior::CloseOnClickOutside)
 				.show(content)
 		} else {
 			None
