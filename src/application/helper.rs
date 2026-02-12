@@ -17,27 +17,12 @@ impl StickyPopupExt for egui::Response {
 		let is_pointing_at_button = self.contains_pointer();
 
 		// Open (or keep open) the popup.
-		let popup_response = if is_pointing_at_button || is_popup_open {
+		if is_pointing_at_button || is_popup_open {
 				popup.open_memory(egui::SetOpenCommand::Bool(true))
 				.close_behavior(PopupCloseBehavior::CloseOnClickOutside)
 				.show(content)
 		} else {
 			None
 		};
-
-		// Close if we're not interacting with the button or child
-		if let Some(response) = popup_response {
-			let is_pointing_at_popup = response.response.contains_pointer();
-			let click_registered = ui.input(|input_reader : &InputState| input_reader.pointer.any_click());
-
-			if click_registered && is_pointing_at_popup {
-				info!("Clicked le popup!");
-
-			}
-			else if !is_pointing_at_button && !is_pointing_at_popup {
-				info!("{:?}", (is_pointing_at_button, !is_pointing_at_popup, !click_registered));
-				//Popup::<'_>::close_id(ui.ctx(), popup_id);
-			}
-		}
 	} // fn create_popup
 }
