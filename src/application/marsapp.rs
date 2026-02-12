@@ -1,7 +1,9 @@
 use eframe::{App, Frame};
 use egui::{Context, Ui};
 use core::default::Default;
+use std::io::{Read};
 use eframe::epaint::Color32;
+use serde::{Deserialize, Serialize};
 use crate::application::helper::StickyPopupExt;
 
 #[repr(u64)]
@@ -15,9 +17,20 @@ pub(super) enum Id {
 	Help,
 }
 
+#[derive(Serialize, Deserialize)]
 pub(crate) struct MarsApp
 {
+	#[serde(skip)]
 	code_buffer : String,
+	show_symbol_table : bool,
+	allow_program_args : bool,
+	allow_syscall_interrupts : bool,
+	hexadecimal_addresses : bool,
+	hexadecimal_values : bool,
+	assemble_on_open : bool,
+	assemble_full_dir : bool,
+	warn_as_err : bool,
+	init_pc : bool,
 }
 
 impl MarsApp
@@ -27,6 +40,15 @@ impl MarsApp
 	{
 		Self {
 			code_buffer: String::new(),
+			show_symbol_table: false,
+			allow_program_args: false,
+			allow_syscall_interrupts: false,
+			hexadecimal_addresses: false,
+			hexadecimal_values: false,
+			assemble_on_open: false,
+			assemble_full_dir: false,
+			warn_as_err: false,
+			init_pc: false,
 		}
 	}
 
@@ -37,7 +59,7 @@ impl MarsApp
 					Self::create_file_section(ui);
 					Self::create_edit_section(ui);
 					Self::create_run_section(ui);
-					Self::create_settings_section(ui);
+					self.create_settings_section(ui);
 					Self::create_tools_section(ui);
 					Self::create_help_section(ui);
 				})
@@ -51,14 +73,14 @@ impl MarsApp
 			ui.label("Open...");
 			ui.label("Close");
 			ui.label("Close All");
-			// TODO: investigate putting a line here.
+			ui.separator();
 			ui.label("Save");
 			ui.label("Save As...");
 			ui.label("Save All");
 			ui.label("Dump Memory...");
-			// TODO: Another line here
+			ui.separator();
 			ui.label("Print...");
-			// TODO: Investigate if this applies to web...
+			ui.separator();
 			ui.label("Exit");
 		},
 		Id::File,
@@ -69,11 +91,11 @@ impl MarsApp
 		ui.button("Edit").create_popup(ui, |ui : &mut Ui| {
 			ui.label("Undo");
 			ui.label("Redo");
-			// TODO: Put a line here
+			ui.separator();
 			ui.label("Cut");
 			ui.label("Copy");
 			ui.label("Paste");
-			// TODO: Put a line here
+			ui.separator();
 			ui.label("Find/Replace");
 			ui.label("Select All");
 		},
@@ -90,7 +112,7 @@ impl MarsApp
 		ui.label("Pause");
 		ui.label("Stop");
 		ui.label("Reset");
-		// TODO: Put a line break here
+		ui.separator();
 		ui.label("Clear all breakpoints");
 		ui.label("Toggle all breakpoints");
 		},
@@ -98,20 +120,19 @@ impl MarsApp
 		)
 	} // create_run_section
 
-	fn create_settings_section(ui : &mut Ui) {
+	fn create_settings_section(&mut self, ui : &mut Ui) {
 		ui.button("Settings").create_popup(ui, |ui : &mut Ui| {
-			let mut boolean : bool = false;
-	
-			ui.checkbox(&mut boolean, "Show Labels Window (symbol table)");
-			ui.checkbox(&mut boolean, "Program arguments provided to wasm program");
-			ui.checkbox(&mut boolean, "Popup dialogue for input syscalls"); // CLARIFY: Does wasm have syscalls?
-			ui.checkbox(&mut boolean, "Addresses displayed in hexadecimal");
-			ui.checkbox(&mut boolean, "Values displayed in hexadecimal");
-			// TODO: Line
-			ui.checkbox(&mut boolean, "Assemble file upon opening");
-			ui.checkbox(&mut boolean, "Assemble all files in directory");
-			ui.checkbox(&mut boolean, "Assembler warnings are considered errors");
-			ui.checkbox(&mut boolean, "Initialize Program Counter to global 'main' if initialized");
+			ui.checkbox(&mut self.show_symbol_table, "Show Labels Window (symbol table)");
+			ui.checkbox(&mut self.allow_program_args, "Program arguments provided to wasm program");
+			ui.checkbox(&mut self.allow_syscall_interrupts, "Popup dialogue for input syscalls"); // CLARIFY: Does wasm have syscalls?
+			ui.checkbox(&mut self.hexadecimal_addresses, "Addresses displayed in hexadecimal");
+			ui.checkbox(&mut self.hexadecimal_values, "Values displayed in hexadecimal");
+			ui.separator();
+			ui.checkbox(&mut self.assemble_on_open, "Assemble file upon opening");
+			ui.checkbox(&mut self.assemble_full_dir, "Assemble all files in directory");
+			ui.checkbox(&mut self.warn_as_err, "Assembler warnings are considered errors");
+			ui.checkbox(&mut self.init_pc, "Initialize Program Counter to global 'main' if initialized");
+			ui.separator();
 			// Clarify: I don't think any of the last three options make sense here.
 			ui.label("Editor...");
 			ui.label("Highlighting...");
@@ -139,7 +160,6 @@ impl MarsApp
 		Id::Help
 		)
 	} // create_help_section
-	
 } // impl MarsApp
 impl App for MarsApp
 {
@@ -162,3 +182,12 @@ impl App for MarsApp
 
 	} // fn update
 } // impl App
+
+impl Read for MarsApp {
+	/// Unexpected behavior: This does not report the number of bytes written.
+	/// The value defaults to 0.
+	fn read(&mut self, buf: &mut [u8]) -> std::io::Result<usize> {
+		serde_json::to_writer(buf, self)?;
+		Ok(0)
+	}
+}
