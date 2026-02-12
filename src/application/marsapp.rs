@@ -51,14 +51,14 @@ impl MarsApp
 			ui.label("Open...");
 			ui.label("Close");
 			ui.label("Close All");
-			// TODO: investigate putting a line here.
+			ui.separator();
 			ui.label("Save");
 			ui.label("Save As...");
 			ui.label("Save All");
 			ui.label("Dump Memory...");
-			// TODO: Another line here
+			ui.separator();
 			ui.label("Print...");
-			// TODO: Investigate if this applies to web...
+			ui.separator();
 			ui.label("Exit");
 		},
 		Id::File,
@@ -69,11 +69,11 @@ impl MarsApp
 		ui.button("Edit").create_popup(ui, |ui : &mut Ui| {
 			ui.label("Undo");
 			ui.label("Redo");
-			// TODO: Put a line here
+			ui.separator();
 			ui.label("Cut");
 			ui.label("Copy");
 			ui.label("Paste");
-			// TODO: Put a line here
+			ui.separator();
 			ui.label("Find/Replace");
 			ui.label("Select All");
 		},
@@ -90,7 +90,7 @@ impl MarsApp
 		ui.label("Pause");
 		ui.label("Stop");
 		ui.label("Reset");
-		// TODO: Put a line break here
+		ui.separator();
 		ui.label("Clear all breakpoints");
 		ui.label("Toggle all breakpoints");
 		},
@@ -107,11 +107,12 @@ impl MarsApp
 			ui.checkbox(&mut boolean, "Popup dialogue for input syscalls"); // CLARIFY: Does wasm have syscalls?
 			ui.checkbox(&mut boolean, "Addresses displayed in hexadecimal");
 			ui.checkbox(&mut boolean, "Values displayed in hexadecimal");
-			// TODO: Line
+			ui.separator();
 			ui.checkbox(&mut boolean, "Assemble file upon opening");
 			ui.checkbox(&mut boolean, "Assemble all files in directory");
 			ui.checkbox(&mut boolean, "Assembler warnings are considered errors");
 			ui.checkbox(&mut boolean, "Initialize Program Counter to global 'main' if initialized");
+			ui.separator();
 			// Clarify: I don't think any of the last three options make sense here.
 			ui.label("Editor...");
 			ui.label("Highlighting...");
