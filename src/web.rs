@@ -12,6 +12,9 @@ pub async fn start(canvas_id : &str) -> Result<(), JsValue> {
 		.get_element_by_id(canvas_id).expect("Canvas ID doesn't match any HTML element??")
 		.dyn_into::<HtmlCanvasElement>()?;
 
+	wasm_logger::init(wasm_logger::Config::new(log::Level::Info));
+	log::info!("Spinning up!");
+
 	eframe::WebRunner::new()
 		.start(
 			canvas,
